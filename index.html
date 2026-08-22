@@ -117,6 +117,35 @@ canvas{width:100%;height:220px;display:block}
 .sleep-block{position:absolute;top:5px;height:16px;border-radius:7px;background:var(--accent)}
 .sleep-profile-note{color:var(--muted);font-size:12px;line-height:1.5;margin-top:10px}
 
+
+.about-link{
+  display:inline-block;
+  margin-top:10px;
+  color:var(--muted);
+  font-size:12px;
+  text-decoration:underline;
+  text-underline-offset:3px;
+  cursor:pointer;
+}
+.about-box{
+  margin-top:12px;
+  padding:14px 16px;
+  background:#fafaf7;
+  border:1px solid var(--line);
+  border-radius:14px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+}
+.about-box summary{
+  cursor:pointer;
+  color:var(--text);
+  font-weight:600;
+  list-style:none;
+}
+.about-box summary::-webkit-details-marker{display:none}
+.about-box p{margin:10px 0 0}
+
 </style>
 </head>
 <body>
@@ -274,6 +303,13 @@ canvas{width:100%;height:220px;display:block}
 
   <div class="footer">
     Cet agenda est un outil d’observation personnelle. Si ton sommeil te préoccupe durablement ou affecte tes journées, parle-en à un professionnel de santé.
+
+    <details class="about-box">
+      <summary>À propos de cet agenda</summary>
+      <p>Mon Agenda du Sommeil a été conçu pour t’aider à observer ton rythme pendant 14 jours à partir d’informations simples renseignées chaque matin, comme tes horaires, le temps estimé pour t’endormir, tes réveils nocturnes, la qualité subjective de ton sommeil et ta sensation de récupération.</p>
+      <p>Les données restent enregistrées localement dans ton navigateur et ne sont pas envoyées automatiquement vers un serveur externe par cette web app.</p>
+      <p>Les résultats reposent sur tes estimations et servent à prendre du recul sur ton sommeil ; ils ne remplacent pas une actimétrie, une polysomnographie ni un diagnostic médical.</p>
+    </details>
   </div>
 </div>
 
