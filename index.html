@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Mon sommeil">
-<link rel="apple-touch-icon" href="agenda-sommeil-icon.png">
+<link rel="apple-touch-icon" href="agenda-sommeil-icon-v3.png">
 <style>
 :root{
   --bg:#f6f5f1;
@@ -31,6 +31,38 @@ body{
 }
 h1{font-size:30px;line-height:1.05;margin:0 0 10px}
 .sub{color:var(--muted);line-height:1.5;margin:0}
+
+.instructions{
+  background:#fffdf8;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px 18px;
+  margin:10px 0 14px;
+}
+.instructions summary{
+  cursor:pointer;
+  font-weight:700;
+  font-size:15px;
+  color:var(--text);
+  list-style:none;
+}
+.instructions summary::-webkit-details-marker{display:none}
+.instructions summary::after{
+  content:"＋";
+  float:right;
+  color:var(--accent);
+  font-weight:700;
+}
+.instructions[open] summary::after{content:"–"}
+.instructions-content{
+  margin-top:14px;
+  color:var(--text);
+  line-height:1.6;
+  font-size:14px;
+}
+.instructions-content p{margin:0 0 12px}
+.instructions-content p:last-child{margin-bottom:0}
+
 .card{
   background:var(--card);border:1px solid var(--line);border-radius:22px;
   padding:18px;margin:14px 0;box-shadow:0 4px 20px rgba(0,0,0,.03)
@@ -71,6 +103,20 @@ canvas{width:100%;height:220px;display:block}
 .report-preview{white-space:pre-wrap;background:#fafaf7;border:1px solid var(--line);border-radius:16px;padding:14px;line-height:1.55;font-size:14px}
 .footer{padding:18px 4px 40px;color:var(--muted);font-size:12px}
 .hidden{display:none}
+
+.feeling-range{width:100%;padding:0;accent-color:var(--accent);background:transparent}
+.range-ends{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px;margin-top:4px}
+.feeling-label{margin-top:7px;font-size:13px;font-weight:700;color:var(--accent)}
+.sleep-profile-wrap{overflow-x:auto;padding-bottom:4px}
+.sleep-profile{min-width:680px}
+.sleep-profile .axis{display:grid;grid-template-columns:92px 1fr;gap:10px;margin-bottom:8px}
+.sleep-profile .axis-hours{display:grid;grid-template-columns:repeat(9,1fr);color:var(--muted);font-size:11px}
+.sleep-row{display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:center;margin:8px 0}
+.sleep-date{font-size:12px;color:var(--muted);text-align:right}
+.sleep-track{position:relative;height:26px;border-radius:9px;background:repeating-linear-gradient(to right,#f4f4f0 0,#f4f4f0 calc(6.25% - 1px),#e3e3dc calc(6.25% - 1px),#e3e3dc 6.25%);overflow:hidden}
+.sleep-block{position:absolute;top:5px;height:16px;border-radius:7px;background:var(--accent)}
+.sleep-profile-note{color:var(--muted);font-size:12px;line-height:1.5;margin-top:10px}
+
 </style>
 </head>
 <body>
@@ -80,6 +126,23 @@ canvas{width:100%;height:220px;display:block}
     <h1>Chaque matin, prends une minute pour raconter ta nuit.</h1>
     <p class="sub">Tes réponses restent enregistrées sur cet appareil. Au fil des jours, ton agenda fait apparaître les habitudes et les variations que l’on remarque rarement d’une nuit à l’autre.</p><p class="note" style="margin-top:10px">Conseil : ajoute cet agenda à l’écran d’accueil de ton téléphone pour le retrouver en un geste chaque matin.</p>
   </div>
+
+  <details class="instructions">
+    <summary>Comment utiliser ton agenda</summary>
+    <div class="instructions-content">
+      <p>Tu n’as rien à changer à ton sommeil avant de commencer, parce que pendant les prochains jours, l’idée est simplement d’observer ton rythme tel qu’il est vraiment, avec ses bonnes nuits, ses nuits plus compliquées et tout ce qui se passe entre les deux.</p>
+
+      <p><strong>Remplis ton agenda le matin</strong>, lorsque la nuit est encore assez fraîche dans ta mémoire, mais sans chercher à retrouver chaque minute avec précision ; ton estimation est largement suffisante, et il n’est surtout pas nécessaire de regarder l’heure pendant la nuit uniquement pour pouvoir remplir l’agenda le lendemain.</p>
+
+      <p>Si tu oublies une journée, ne cherche pas à reconstruire la nuit plusieurs jours plus tard, parce que tu risques davantage de remplir les blancs avec une impression qu’avec un vrai souvenir ; reprends simplement le lendemain matin et continue normalement.</p>
+
+      <p>Pense aussi à noter ce qui a rendu ta journée ou ta nuit un peu différente de d’habitude, qu’il s’agisse d’une sieste, d’un déplacement, d’une soirée plus tardive, d’une journée particulièrement stressante ou simplement d’un événement qui te semble avoir influencé ton sommeil.</p>
+
+      <p>Au début, essaie de ne pas interpréter chaque chiffre séparément, parce qu’une nuit isolée raconte finalement assez peu de choses ; c’est lorsque plusieurs jours commencent à se suivre que ton rythme, tes variations et les différences entre les bons et les moins bons matins deviennent réellement intéressants.</p>
+
+      <p><strong>Après 14 jours, ton bilan te permettra de regarder l’ensemble avec davantage de recul</strong>, en reliant ce qui se passe pendant tes nuits à la façon dont tu te sens au réveil et dans ta journée, sans chercher à obtenir un sommeil parfait ni à transformer ton agenda en nouvelle performance à réussir.</p>
+</div>
+  </details>
 
   <div class="card">
     <h2 class="section-title">Ta nuit</h2>
@@ -115,11 +178,11 @@ canvas{width:100%;height:220px;display:block}
         <input id="waso" type="number" min="0" step="1" placeholder="minutes">
       </div>
       <div>
-        <label>À quelle heure t’es-tu réveillé pour la dernière fois ?</label>
+        <label>À quelle heure t’es-tu réveillé ?</label>
         <input id="finalWake" type="time">
       </div>
       <div>
-        <label>À quelle heure t’es-tu levé ?</label>
+        <label>À quelle heure es-tu sorti du lit ?</label>
         <input id="getUp" type="time">
       </div>
       <div>
@@ -134,23 +197,17 @@ canvas{width:100%;height:220px;display:block}
       </div>
       <div>
         <label>Comment était ton sommeil ?</label>
-        <select id="quality">
-          <option value="1">1 — Très mauvaise</option>
-          <option value="2">2 — Mauvaise</option>
-          <option value="3" selected>3 — Moyenne</option>
-          <option value="4">4 — Bonne</option>
-          <option value="5">5 — Très bonne</option>
-        </select>
+        <input id="quality" class="feeling-range" type="range" min="1" max="5" step="1" value="3"
+               oninput="updateFeelingLabel('quality','qualityLabel')">
+        <div class="range-ends"><span>Très mauvaise</span><span>Très bonne</span></div>
+        <div id="qualityLabel" class="feeling-label">Moyenne · 3/5</div>
       </div>
       <div>
         <label>Comment te sens-tu au réveil ?</label>
-        <select id="rested">
-          <option value="1">1 — Pas du tout reposé</option>
-          <option value="2">2 — Peu reposé</option>
-          <option value="3" selected>3 — Moyennement reposé</option>
-          <option value="4">4 — Reposé</option>
-          <option value="5">5 — Très reposé</option>
-        </select>
+        <input id="rested" class="feeling-range" type="range" min="1" max="5" step="1" value="3"
+               oninput="updateFeelingLabel('rested','restedLabel')">
+        <div class="range-ends"><span>Pas du tout reposé</span><span>Très reposé</span></div>
+        <div id="restedLabel" class="feeling-label">Moyennement reposé · 3/5</div>
       </div>
       <div>
         <label>As-tu pris quelque chose pour dormir ?</label>
@@ -173,25 +230,17 @@ canvas{width:100%;height:220px;display:block}
     <div class="kpis">
       <div class="kpi"><span>Nuits observées</span><b id="kN">0</b></div>
       <div class="kpi"><span>Sommeil moyen</span><b id="kTST">—</b></div>
-      <div class="kpi"><span>Temps au lit réellement dormi</span><b id="kSE">—</b></div>
+      <div class="kpi"><span>Part du temps au lit passée à dormir</span><b id="kSE">—</b></div>
       <div class="kpi"><span>Temps moyen pour t’endormir</span><b id="kSOL">—</b></div>
     </div>
   </div>
 
   <div class="card">
-    <h2 class="section-title">Évolution</h2>
-    <div class="chart-card">
-      <p class="chart-title">Combien de temps tu dors</p>
-      <canvas id="chartTST" width="700" height="220"></canvas>
+    <h2 class="section-title">Ton rythme sur les derniers jours</h2>
+    <div class="sleep-profile-wrap">
+      <div id="sleepProfile" class="sleep-profile"></div>
     </div>
-    <div class="chart-card">
-      <p class="chart-title">La part de ton temps au lit passée à dormir</p>
-      <canvas id="chartSE" width="700" height="220"></canvas>
-    </div>
-    <div class="chart-card">
-      <p class="chart-title">Endormissement et temps éveillé pendant la nuit</p>
-      <canvas id="chartFragment" width="700" height="220"></canvas>
-    </div>
+    <p class="sleep-profile-note">Chaque ligne représente une nuit sur une échelle allant de 20 h à 12 h le lendemain ; l’intérêt est surtout de voir comment tes horaires et la durée de tes nuits évoluent d’un jour à l’autre.</p>
   </div>
 
   <div class="card">
@@ -293,6 +342,8 @@ function clearForm(keepDate=false){
   document.getElementById("nap").value="Non";
   document.getElementById("quality").value="3";
   document.getElementById("rested").value="3";
+  updateFeelingLabel("quality","qualityLabel");
+  updateFeelingLabel("rested","restedLabel");
   if(!keepDate) document.getElementById("date").value=todayISO();
 }
 function deleteEntry(id){
@@ -479,17 +530,60 @@ ${question}
 
 Ton agenda n’est pas là pour noter ton sommeil comme une performance. Il sert surtout à prendre un peu de recul : une seule mauvaise nuit peut prendre beaucoup de place dans notre mémoire, alors que plusieurs jours racontent souvent une histoire plus nuancée.`;
 }
+function updateFeelingLabel(inputId,labelId){
+  const value=Number(document.getElementById(inputId).value);
+  const qualityLabels=["","Très mauvaise","Mauvaise","Moyenne","Bonne","Très bonne"];
+  const restedLabels=["","Pas du tout reposé","Peu reposé","Moyennement reposé","Reposé","Très reposé"];
+  const labels=inputId==="quality"?qualityLabels:restedLabels;
+  const target=document.getElementById(labelId);
+  if(target) target.textContent=`${labels[value]} · ${value}/5`;
+}
+
+function timelinePercent(time){
+  if(!time) return null;
+  let m=minutes(time);
+  if(m < 12*60) m += 1440;
+  const start=20*60, end=36*60;
+  return Math.max(0,Math.min(100,((m-start)/(end-start))*100));
+}
+
+function durationPercent(startTime,endTime){
+  if(!startTime || !endTime) return 0;
+  const d=diffMinutes(startTime,endTime);
+  return Math.max(0,Math.min(100,(d/(16*60))*100));
+}
+
+function renderSleepProfile(){
+  const el=document.getElementById("sleepProfile");
+  if(!el) return;
+  if(!entries.length){
+    el.innerHTML='<p class="note">Ton rythme apparaîtra ici après ta première nuit enregistrée.</p>';
+    return;
+  }
+  const shown=entries.slice(-14);
+  let out=`
+    <div class="axis">
+      <div></div>
+      <div class="axis-hours">
+        <span>20 h</span><span>22 h</span><span>00 h</span><span>02 h</span><span>04 h</span><span>06 h</span><span>08 h</span><span>10 h</span><span>12 h</span>
+      </div>
+    </div>`;
+  shown.forEach(e=>{
+    const start=timelinePercent(e.trySleep || e.bedTime);
+    const width=durationPercent(e.trySleep || e.bedTime,e.finalWake || e.getUp);
+    out+=`
+      <div class="sleep-row">
+        <div class="sleep-date">${e.date.slice(5).split("-").reverse().join("/")}</div>
+        <div class="sleep-track">
+          <div class="sleep-block" style="left:${start??0}%;width:${width}%"></div>
+        </div>
+      </div>`;
+  });
+  el.innerHTML=out;
+}
+
 function renderCharts(){
-  lineChart("chartTST",[
-    {values:entries.map(e=>e.tstMin==null?null:e.tstMin/60)}
-  ],0,12);
-  lineChart("chartSE",[
-    {values:entries.map(e=>e.efficiency)}
-  ],50,100);
-  lineChart("chartFragment",[
-    {values:entries.map(e=>e.sol)},
-    {values:entries.map(e=>e.waso)}
-  ],0,null);
+  renderSleepProfile();
 }
 
 function exportReport(){
@@ -531,6 +625,8 @@ render=function(){
   const rp=document.getElementById("reportPreview");
   if(rp) rp.textContent=generateReportText();
 }
+updateFeelingLabel("quality","qualityLabel");
+updateFeelingLabel("rested","restedLabel");
 render();
 </script>
 </body>
