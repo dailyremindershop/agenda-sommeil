@@ -1,0 +1,14 @@
+{
+  "name": "Mon Agenda du Sommeil",
+  "short_name": "Mon sommeil",
+  "description": "Un agenda du sommeil de 14 jours pour observer son rythme et sa récupération.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f1e7",
+  "theme_color": "#142237",
+  "icons": [
+    {"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}

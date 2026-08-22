@@ -1,635 +1,1463 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mon agenda du sommeil</title>
-<meta name="theme-color" content="#f6f5f1">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Mon sommeil">
-<link rel="apple-touch-icon" href="agenda-sommeil-icon-v3.png">
-<style>
-:root{
-  --bg:#f6f5f1;
-  --card:#ffffff;
-  --text:#1f2321;
-  --muted:#6f756f;
-  --line:#e6e5df;
-  --accent:#2f5d50;
-  --accent2:#e8f0ec;
-  --danger:#9b3f3f;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-}
-.wrap{max-width:760px;margin:0 auto;padding:18px}
-.hero{
-  padding:28px 18px 18px;
-}
-h1{font-size:30px;line-height:1.05;margin:0 0 10px}
-.sub{color:var(--muted);line-height:1.5;margin:0}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#142237">
+  <meta name="color-scheme" content="light">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Mon sommeil">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="description" content="Un agenda du sommeil de 14 jours pour observer son rythme, ses nuits et sa récupération.">
+  <title>Mon Agenda du Sommeil</title>
 
-.instructions{
-  background:#fffdf8;
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:16px 18px;
-  margin:10px 0 14px;
-}
-.instructions summary{
-  cursor:pointer;
-  font-weight:700;
-  font-size:15px;
-  color:var(--text);
-  list-style:none;
-}
-.instructions summary::-webkit-details-marker{display:none}
-.instructions summary::after{
-  content:"＋";
-  float:right;
-  color:var(--accent);
-  font-weight:700;
-}
-.instructions[open] summary::after{content:"–"}
-.instructions-content{
-  margin-top:14px;
-  color:var(--text);
-  line-height:1.6;
-  font-size:14px;
-}
-.instructions-content p{margin:0 0 12px}
-.instructions-content p:last-child{margin-bottom:0}
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-180.png">
 
-.card{
-  background:var(--card);border:1px solid var(--line);border-radius:22px;
-  padding:18px;margin:14px 0;box-shadow:0 4px 20px rgba(0,0,0,.03)
-}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:640px){.grid{grid-template-columns:1fr}}
-label{display:block;font-size:14px;font-weight:600;margin:2px 0 6px}
-.help{font-size:12px;color:var(--muted);margin-top:4px}
-input,select,textarea{
-  width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;
-  padding:13px 12px;font-size:16px;color:var(--text);outline:none
-}
-input:focus,select:focus,textarea:focus{border-color:var(--accent)}
-textarea{min-height:90px;resize:vertical}
-.section-title{font-size:18px;margin:0 0 14px}
-.btns{display:flex;gap:10px;flex-wrap:wrap}
-button{
-  border:0;border-radius:14px;padding:13px 16px;font-size:15px;font-weight:700;cursor:pointer
-}
-.primary{background:var(--accent);color:#fff}
-.secondary{background:var(--accent2);color:var(--accent)}
-.ghost{background:#f3f3ef;color:var(--text)}
-.danger{background:#f7e7e7;color:var(--danger)}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-@media(max-width:640px){.kpis{grid-template-columns:1fr 1fr}}
-.kpi{background:#fafaf7;border:1px solid var(--line);border-radius:16px;padding:13px}
-.kpi b{display:block;font-size:22px;margin-top:5px}
-.kpi span{font-size:12px;color:var(--muted)}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-th{color:var(--muted);font-size:12px}
-.scroll{overflow:auto}
-.note{font-size:12px;color:var(--muted);line-height:1.5}
-.pill{display:inline-block;background:var(--accent2);color:var(--accent);padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700}
-.chart-card{background:#fafaf7;border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:12px}
-.chart-title{font-size:14px;font-weight:700;margin:0 0 8px}
-canvas{width:100%;height:220px;display:block}
-.report-preview{white-space:pre-wrap;background:#fafaf7;border:1px solid var(--line);border-radius:16px;padding:14px;line-height:1.55;font-size:14px}
-.footer{padding:18px 4px 40px;color:var(--muted);font-size:12px}
-.hidden{display:none}
+  <style>
+    :root{
+      --night:#142237;
+      --night-2:#1b2e49;
+      --cream:#f5f1e7;
+      --paper:#fbfaf7;
+      --card:#ffffff;
+      --ink:#202523;
+      --muted:#69716c;
+      --line:#e5e4de;
+      --green:#315f52;
+      --green-soft:#e9f0ec;
+      --danger:#9a4545;
+      --shadow:0 8px 30px rgba(20,34,55,.06);
+      --radius:22px;
+    }
 
-.feeling-range{width:100%;padding:0;accent-color:var(--accent);background:transparent}
-.range-ends{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px;margin-top:4px}
-.feeling-label{margin-top:7px;font-size:13px;font-weight:700;color:var(--accent)}
-.sleep-profile-wrap{overflow-x:auto;padding-bottom:4px}
-.sleep-profile{min-width:680px}
-.sleep-profile .axis{display:grid;grid-template-columns:92px 1fr;gap:10px;margin-bottom:8px}
-.sleep-profile .axis-hours{display:grid;grid-template-columns:repeat(9,1fr);color:var(--muted);font-size:11px}
-.sleep-row{display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:center;margin:8px 0}
-.sleep-date{font-size:12px;color:var(--muted);text-align:right}
-.sleep-track{position:relative;height:26px;border-radius:9px;background:repeating-linear-gradient(to right,#f4f4f0 0,#f4f4f0 calc(6.25% - 1px),#e3e3dc calc(6.25% - 1px),#e3e3dc 6.25%);overflow:hidden}
-.sleep-block{position:absolute;top:5px;height:16px;border-radius:7px;background:var(--accent)}
-.sleep-profile-note{color:var(--muted);font-size:12px;line-height:1.5;margin-top:10px}
+    *{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:var(--paper);
+      color:var(--ink);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      -webkit-font-smoothing:antialiased;
+      padding-bottom:max(28px, env(safe-area-inset-bottom));
+    }
 
+    button,input,select,textarea{font:inherit}
+    button{touch-action:manipulation}
+    a{color:inherit}
 
-.about-link{
-  display:inline-block;
-  margin-top:10px;
-  color:var(--muted);
-  font-size:12px;
-  text-decoration:underline;
-  text-underline-offset:3px;
-  cursor:pointer;
-}
-.about-box{
-  margin-top:12px;
-  padding:14px 16px;
-  background:#fafaf7;
-  border:1px solid var(--line);
-  border-radius:14px;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.6;
-}
-.about-box summary{
-  cursor:pointer;
-  color:var(--text);
-  font-weight:600;
-  list-style:none;
-}
-.about-box summary::-webkit-details-marker{display:none}
-.about-box p{margin:10px 0 0}
+    .app-header{
+      background:var(--night);
+      color:var(--cream);
+      padding:
+        max(14px, env(safe-area-inset-top))
+        max(18px, env(safe-area-inset-right))
+        14px
+        max(18px, env(safe-area-inset-left));
+      position:relative;
+    }
+    .header-inner{
+      max-width:760px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:11px;
+      min-width:0;
+    }
+    .brand img{
+      width:38px;height:38px;border-radius:11px;display:block;flex:0 0 auto;
+    }
+    .brand-copy{min-width:0}
+    .brand-title{
+      font-size:16px;
+      font-weight:750;
+      letter-spacing:-.01em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .brand-sub{
+      font-size:11px;
+      opacity:.72;
+      margin-top:2px;
+    }
+    .day-badge{
+      border:1px solid rgba(245,241,231,.25);
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:11px;
+      font-weight:700;
+      white-space:nowrap;
+    }
 
-</style>
+    .wrap{
+      width:min(100%,760px);
+      margin:0 auto;
+      padding:18px 14px 36px;
+    }
+
+    .intro{
+      padding:8px 4px 2px;
+    }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      background:var(--green-soft);
+      color:var(--green);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      font-weight:750;
+      margin-bottom:12px;
+    }
+    h1{
+      font-size:clamp(27px,7vw,38px);
+      line-height:1.08;
+      letter-spacing:-.035em;
+      margin:0 0 12px;
+      max-width:650px;
+    }
+    .lede{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.58;
+      margin:0;
+      max-width:650px;
+    }
+
+    .install-banner{
+      margin:16px 0 4px;
+      padding:14px;
+      border-radius:18px;
+      background:var(--night);
+      color:var(--cream);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      box-shadow:var(--shadow);
+    }
+    .install-copy{min-width:0}
+    .install-copy strong{display:block;font-size:14px;margin-bottom:3px}
+    .install-copy span{display:block;font-size:12px;line-height:1.4;opacity:.78}
+    .install-btn{
+      border:1px solid rgba(245,241,231,.28);
+      background:rgba(255,255,255,.08);
+      color:var(--cream);
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:750;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .standalone .install-banner{display:none}
+
+    details{
+      border:1px solid var(--line);
+      background:var(--card);
+      border-radius:18px;
+      box-shadow:0 3px 18px rgba(20,34,55,.03);
+    }
+    details > summary{
+      list-style:none;
+      cursor:pointer;
+      padding:15px 16px;
+      font-size:14px;
+      font-weight:750;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    details > summary::-webkit-details-marker{display:none}
+    details > summary::after{
+      content:"＋";
+      color:var(--green);
+      font-size:18px;
+      line-height:1;
+    }
+    details[open] > summary::after{content:"–"}
+    .details-body{
+      padding:0 16px 16px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.62;
+    }
+    .details-body p{margin:0 0 13px}
+    .details-body p:last-child{margin-bottom:0}
+    .details-body strong{color:var(--ink)}
+
+    .instructions{margin:14px 0 16px}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:18px;
+      margin:14px 0;
+      box-shadow:var(--shadow);
+    }
+    .section-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:16px;
+    }
+    .section-head h2,
+    .section-title{
+      margin:0;
+      font-size:20px;
+      line-height:1.2;
+      letter-spacing:-.02em;
+    }
+    .section-sub{
+      margin:5px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .progress{
+      width:74px;
+      flex:0 0 auto;
+      text-align:right;
+    }
+    .progress strong{
+      display:block;
+      font-size:15px;
+      color:var(--green);
+    }
+    .progress-track{
+      height:5px;
+      border-radius:999px;
+      background:#ecece6;
+      margin-top:6px;
+      overflow:hidden;
+    }
+    .progress-bar{
+      height:100%;
+      width:0;
+      background:var(--green);
+      border-radius:999px;
+      transition:width .2s ease;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:15px 14px;
+    }
+    .field.full{grid-column:1/-1}
+    label{
+      display:block;
+      font-size:15px;
+      line-height:1.35;
+      font-weight:720;
+      margin:0 0 7px;
+    }
+    .field-help{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.4;
+      margin-top:6px;
+    }
+
+    input,select,textarea{
+      width:100%;
+      border:1px solid #deded7;
+      background:#fff;
+      color:var(--ink);
+      border-radius:15px;
+      outline:none;
+      font-size:16px;
+      transition:border-color .15s ease, box-shadow .15s ease;
+    }
+    input,select{
+      height:54px;
+      min-height:54px;
+      padding:0 14px;
+    }
+    input[type="date"],
+    input[type="time"]{
+      -webkit-appearance:auto;
+      appearance:auto;
+      line-height:54px;
+    }
+    input[type="number"]{appearance:textfield}
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+    textarea{
+      min-height:96px;
+      padding:13px 14px;
+      line-height:1.45;
+      resize:vertical;
+    }
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--green);
+      box-shadow:0 0 0 3px rgba(49,95,82,.10);
+    }
+
+    .feeling-wrap{
+      padding:4px 0 0;
+    }
+    input[type="range"].feeling-range{
+      height:30px;
+      min-height:30px;
+      padding:0;
+      border:0;
+      box-shadow:none;
+      accent-color:var(--green);
+      background:transparent;
+    }
+    .range-ends{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      color:var(--muted);
+      font-size:11px;
+      margin-top:1px;
+    }
+    .feeling-label{
+      margin-top:7px;
+      color:var(--green);
+      font-size:15px;
+      font-weight:780;
+    }
+
+    .nap-duration[hidden]{display:none}
+
+    .form-note{
+      margin:14px 0 0;
+      padding:12px 13px;
+      background:#f6f7f4;
+      border-radius:13px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+    .btn{
+      border:0;
+      border-radius:14px;
+      min-height:48px;
+      padding:12px 15px;
+      font-size:14px;
+      font-weight:780;
+      cursor:pointer;
+    }
+    .btn.primary{background:var(--green);color:#fff}
+    .btn.secondary{background:var(--green-soft);color:var(--green)}
+    .btn.ghost{background:#f2f2ee;color:var(--ink)}
+    .btn.danger{background:#f7e9e9;color:var(--danger)}
+    .btn.linklike{
+      background:transparent;
+      color:var(--green);
+      padding-left:0;
+      padding-right:0;
+      min-height:auto;
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+
+    .metrics{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+    }
+    .metric{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fafaf7;
+      padding:13px;
+      min-width:0;
+    }
+    .metric-label{
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.3;
+      min-height:29px;
+    }
+    .metric-value{
+      display:block;
+      margin-top:6px;
+      font-size:21px;
+      font-weight:800;
+      letter-spacing:-.03em;
+      word-break:break-word;
+    }
+    .metric-note{
+      color:var(--green);
+      font-size:10px;
+      margin-top:4px;
+      font-weight:700;
+    }
+
+    .timeline-legend{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:11px;
+      margin-bottom:12px;
+    }
+    .legend-item{display:flex;align-items:center;gap:6px}
+    .legend-swatch{
+      width:18px;height:8px;border-radius:999px;background:#d8dedb;
+    }
+    .legend-swatch.sleep{background:var(--green)}
+
+    .sleep-profile{width:100%}
+    .axis-row,.sleep-row{
+      display:grid;
+      grid-template-columns:45px 1fr;
+      gap:8px;
+      align-items:center;
+    }
+    .axis-row{margin-bottom:7px}
+    .axis{
+      position:relative;
+      height:16px;
+      color:var(--muted);
+      font-size:9px;
+    }
+    .axis span{
+      position:absolute;
+      transform:translateX(-50%);
+      white-space:nowrap;
+    }
+    .sleep-row{margin:8px 0}
+    .sleep-date{
+      color:var(--muted);
+      font-size:10px;
+      text-align:right;
+      font-variant-numeric:tabular-nums;
+    }
+    .sleep-track{
+      position:relative;
+      height:24px;
+      border-radius:8px;
+      background:
+        repeating-linear-gradient(
+          to right,
+          #f2f3ef 0,
+          #f2f3ef calc(12.5% - 1px),
+          #dedfd9 calc(12.5% - 1px),
+          #dedfd9 12.5%
+        );
+      overflow:hidden;
+    }
+    .bed-window{
+      position:absolute;
+      top:4px;
+      height:16px;
+      border-radius:7px;
+      background:#d8dedb;
+    }
+    .sleep-window{
+      position:absolute;
+      top:7px;
+      height:10px;
+      border-radius:6px;
+      background:var(--green);
+    }
+    .timeline-note{
+      margin:12px 0 0;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.5;
+    }
+    .empty{
+      padding:18px 8px;
+      color:var(--muted);
+      font-size:13px;
+      text-align:center;
+    }
+
+    .summary-period{
+      color:var(--muted);
+      font-size:12px;
+      margin:-6px 0 14px;
+    }
+    .summary-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:9px;
+    }
+    .summary-item{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:#fafaf7;
+    }
+    .summary-item span{
+      display:block;
+      color:var(--muted);
+      font-size:10px;
+      line-height:1.3;
+      margin-bottom:4px;
+    }
+    .summary-item strong{
+      font-size:17px;
+      letter-spacing:-.02em;
+    }
+    .summary-item small{
+      display:block;
+      color:var(--green);
+      font-size:9px;
+      margin-top:4px;
+      font-weight:700;
+    }
+    .factual-reading{
+      margin-top:14px;
+      border-top:1px solid var(--line);
+      padding-top:14px;
+    }
+    .factual-reading h3{
+      margin:0 0 8px;
+      font-size:14px;
+    }
+    .factual-reading ul{
+      margin:0;
+      padding-left:19px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.55;
+    }
+    .factual-reading li+li{margin-top:5px}
+
+    .table-wrap{overflow:auto;-webkit-overflow-scrolling:touch}
+    table{width:100%;border-collapse:collapse;font-size:12px;min-width:650px}
+    th,td{
+      padding:9px 8px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      vertical-align:middle;
+      white-space:nowrap;
+    }
+    th{font-size:10px;color:var(--muted);font-weight:750}
+    .mini-delete{
+      border:0;background:#f6ecec;color:var(--danger);border-radius:9px;padding:6px 8px;font-size:11px;font-weight:700;
+    }
+
+    .about-copy{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.62;
+    }
+    .about-copy p{margin:0 0 12px}
+    .club-link{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      color:var(--green);
+      font-weight:780;
+      text-decoration:none;
+      margin-top:4px;
+    }
+
+    .legal{
+      color:var(--muted);
+      font-size:10px;
+      line-height:1.5;
+      padding:4px 4px 8px;
+      text-align:center;
+    }
+
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(12,20,31,.55);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      z-index:999;
+      padding:14px;
+    }
+    .modal-backdrop.open{display:flex}
+    .modal{
+      width:min(100%,520px);
+      background:#fff;
+      border-radius:24px;
+      padding:19px;
+      padding-bottom:max(19px, env(safe-area-inset-bottom));
+      box-shadow:0 22px 70px rgba(0,0,0,.24);
+    }
+    .modal h3{margin:0 0 10px;font-size:20px}
+    .modal p{margin:0 0 12px;color:var(--muted);font-size:13px;line-height:1.55}
+    .steps{
+      margin:0 0 15px;
+      padding-left:20px;
+      color:var(--ink);
+      font-size:13px;
+      line-height:1.6;
+    }
+    .steps li+li{margin-top:5px}
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:max(20px, calc(env(safe-area-inset-bottom) + 14px));
+      transform:translate(-50%,20px);
+      background:var(--night);
+      color:var(--cream);
+      padding:11px 14px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      opacity:0;
+      pointer-events:none;
+      transition:.2s ease;
+      z-index:1000;
+      box-shadow:0 8px 26px rgba(0,0,0,.18);
+      max-width:calc(100vw - 28px);
+      text-align:center;
+    }
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+
+    @media(max-width:640px){
+      .wrap{padding:14px 12px 30px}
+      .card{padding:16px;border-radius:20px;margin:12px 0}
+      .form-grid{grid-template-columns:1fr;gap:16px}
+      .field.full{grid-column:auto}
+      .metrics{grid-template-columns:1fr 1fr}
+      .metric-label{min-height:0}
+      .actions .btn{flex:1 1 100%}
+      .actions.compact .btn{flex:1 1 auto}
+      .install-banner{align-items:flex-start}
+      .install-btn{padding:9px 10px}
+    }
+
+    @media(min-width:641px){
+      .modal-backdrop{align-items:center}
+    }
+
+    @media print{
+      .app-header,.intro,.install-banner,.instructions,.form-card,.timeline-card,.data-details,.about-details,.legal,.toast{display:none!important}
+      body{background:#fff}
+      .wrap{max-width:none;padding:0}
+      .card{box-shadow:none;border:0;padding:0}
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="hero">
-    <div class="pill">Agenda du sommeil</div>
-    <h1>Chaque matin, prends une minute pour raconter ta nuit.</h1>
-    <p class="sub">Tes réponses restent enregistrées sur cet appareil. Au fil des jours, ton agenda fait apparaître les habitudes et les variations que l’on remarque rarement d’une nuit à l’autre.</p><p class="note" style="margin-top:10px">Conseil : ajoute cet agenda à l’écran d’accueil de ton téléphone pour le retrouver en un geste chaque matin.</p>
-  </div>
-
-  <details class="instructions">
-    <summary>Comment utiliser ton agenda</summary>
-    <div class="instructions-content">
-      <p>Tu n’as rien à changer à ton sommeil avant de commencer, parce que pendant les prochains jours, l’idée est simplement d’observer ton rythme tel qu’il est vraiment, avec ses bonnes nuits, ses nuits plus compliquées et tout ce qui se passe entre les deux.</p>
-
-      <p><strong>Remplis ton agenda le matin</strong>, lorsque la nuit est encore assez fraîche dans ta mémoire, mais sans chercher à retrouver chaque minute avec précision ; ton estimation est largement suffisante, et il n’est surtout pas nécessaire de regarder l’heure pendant la nuit uniquement pour pouvoir remplir l’agenda le lendemain.</p>
-
-      <p>Si tu oublies une journée, ne cherche pas à reconstruire la nuit plusieurs jours plus tard, parce que tu risques davantage de remplir les blancs avec une impression qu’avec un vrai souvenir ; reprends simplement le lendemain matin et continue normalement.</p>
-
-      <p>Pense aussi à noter ce qui a rendu ta journée ou ta nuit un peu différente de d’habitude, qu’il s’agisse d’une sieste, d’un déplacement, d’une soirée plus tardive, d’une journée particulièrement stressante ou simplement d’un événement qui te semble avoir influencé ton sommeil.</p>
-
-      <p>Au début, essaie de ne pas interpréter chaque chiffre séparément, parce qu’une nuit isolée raconte finalement assez peu de choses ; c’est lorsque plusieurs jours commencent à se suivre que ton rythme, tes variations et les différences entre les bons et les moins bons matins deviennent réellement intéressants.</p>
-
-      <p><strong>Après 14 jours, ton bilan te permettra de regarder l’ensemble avec davantage de recul</strong>, en reliant ce qui se passe pendant tes nuits à la façon dont tu te sens au réveil et dans ta journée, sans chercher à obtenir un sommeil parfait ni à transformer ton agenda en nouvelle performance à réussir.</p>
-</div>
-  </details>
-
-  <div class="card">
-    <h2 class="section-title">Ta nuit</h2>
-    <div class="grid">
-      <div>
-        <label>Date</label>
-        <input id="date" type="date">
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <img src="icon-180.png" alt="">
+        <div class="brand-copy">
+          <div class="brand-title">Mon Agenda du Sommeil</div>
+          <div class="brand-sub">The Sleep Lab · Club Daily Reminder</div>
+        </div>
       </div>
-      <div>
-        <label>Type de journée</label>
-        <select id="dayType">
-          <option>Travail</option><option>Repos</option><option>Week-end</option><option>Vacances</option><option>Autre</option>
-        </select>
-      </div>
-      <div>
-        <label>Heure de mise au lit</label>
-        <input id="bedTime" type="time">
-      </div>
-      <div>
-        <label>À quelle heure as-tu essayé de dormir ?</label>
-        <input id="trySleep" type="time">
-      </div>
-      <div>
-        <label>Combien de temps as-tu mis à t’endormir ?</label>
-        <input id="sol" type="number" min="0" step="1" placeholder="minutes">
-      </div>
-      <div>
-        <label>Combien de fois te souviens-tu t’être réveillé ?</label>
-        <input id="awakenings" type="number" min="0" step="1" placeholder="ex. 2">
-      </div>
-      <div>
-        <label>Au total, combien de temps es-tu resté éveillé pendant la nuit ?</label>
-        <input id="waso" type="number" min="0" step="1" placeholder="minutes">
-      </div>
-      <div>
-        <label>À quelle heure t’es-tu réveillé ?</label>
-        <input id="finalWake" type="time">
-      </div>
-      <div>
-        <label>À quelle heure es-tu sorti du lit ?</label>
-        <input id="getUp" type="time">
-      </div>
-      <div>
-        <label>As-tu fait une sieste hier ?</label>
-        <select id="nap">
-          <option>Non</option><option>Oui</option>
-        </select>
-      </div>
-      <div>
-        <label>Combien de temps au total ?</label>
-        <input id="napMin" type="number" min="0" step="1" placeholder="minutes">
-      </div>
-      <div>
-        <label>Comment était la qualité de ton sommeil ?</label>
-        <input id="quality" class="feeling-range" type="range" min="1" max="5" step="1" value="3"
-               oninput="updateFeelingLabel('quality','qualityLabel')">
-        <div class="range-ends"><span>Très mauvaise</span><span>Très bonne</span></div>
-        <div id="qualityLabel" class="feeling-label">Moyenne · 3/5</div>
-      </div>
-      <div>
-        <label>Comment te sens-tu au réveil ?</label>
-        <input id="rested" class="feeling-range" type="range" min="1" max="5" step="1" value="3"
-               oninput="updateFeelingLabel('rested','restedLabel')">
-        <div class="range-ends"><span>Pas du tout reposé</span><span>Très reposé</span></div>
-        <div id="restedLabel" class="feeling-label">Moyennement reposé · 3/5</div>
-      </div>
-      <div>
-        <label>As-tu pris quelque chose pour dormir ?</label>
-        <input id="sleepAid" type="text" placeholder="facultatif">
-      </div>
+      <div class="day-badge"><span id="headerCount">0</span>/14 nuits</div>
     </div>
-    <div style="margin-top:12px">
-      <label>Commentaire</label>
-      <textarea id="comment" placeholder="Ex. stress, douleur, alcool, activité inhabituelle, événement particulier…"></textarea>
-    </div>
-    <p class="note">Pas besoin de chronométrer ta nuit. Une estimation suffit : l’idée est d’observer ton sommeil, pas de le surveiller.</p>
-    <div class="btns">
-      <button class="primary" onclick="saveNight()">Ajouter ma nuit</button>
-      <button class="ghost" onclick="clearForm()">Effacer le formulaire</button>
-    </div>
-  </div>
+  </header>
 
-  <div class="card">
-    <h2 class="section-title">Ce que tes nuits commencent à raconter</h2>
-    <div class="kpis">
-      <div class="kpi"><span>Nuits observées</span><b id="kN">0</b></div>
-      <div class="kpi"><span>Sommeil moyen</span><b id="kTST">—</b></div>
-      <div class="kpi"><span>Part du temps au lit passée à dormir</span><b id="kSE">—</b></div>
-      <div class="kpi"><span>Temps moyen pour t’endormir</span><b id="kSOL">—</b></div>
-    </div>
-  </div>
+  <main class="wrap">
+    <section class="intro">
+      <div class="eyebrow">14 jours pour observer ton rythme</div>
+      <h1>Chaque matin, prends quelques minutes pour noter ta nuit.</h1>
+      <p class="lede">L’objectif n’est pas de surveiller ton sommeil à la minute près, mais de regarder plusieurs nuits ensemble pour faire apparaître ton rythme, tes variations et les éléments qui méritent réellement ton attention.</p>
+    </section>
 
-  <div class="card">
-    <h2 class="section-title">Ton rythme sur les derniers jours</h2>
-    <div class="sleep-profile-wrap">
-      <div id="sleepProfile" class="sleep-profile"></div>
-    </div>
-    <p class="sleep-profile-note">Chaque ligne représente une nuit sur une échelle allant de 20 h à 12 h le lendemain ; l’intérêt est surtout de voir comment tes horaires et la durée de tes nuits évoluent d’un jour à l’autre.</p>
-  </div>
-
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
-      <h2 class="section-title" style="margin:0">Synthèse de ton agenda</h2>
-      <button class="primary" onclick="exportReport()">Exporter ma synthèse</button>
-    </div>
-    <p class="note">Cette synthèse reprend les principaux indicateurs issus de ton agenda et les présente de façon descriptive, à partir de tes estimations.</p>
-    <div id="reportPreview" class="report-preview">Ajoute au moins une nuit pour générer une synthèse.</div>
-  </div>
-
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
-      <h2 class="section-title" style="margin:0">Nuits observées</h2>
-      <div class="btns">
-        <button class="secondary" onclick="exportCSV()">Exporter CSV</button>
-        <button class="secondary" onclick="exportJSON()">Exporter JSON</button>
-        <button class="secondary" onclick="exportReport()">Mon bilan</button>
-        <button class="danger" onclick="resetAll()">Tout effacer</button>
+    <div id="installBanner" class="install-banner">
+      <div class="install-copy">
+        <strong>Retrouve ton agenda comme une app</strong>
+        <span>Sur iPhone, ajoute-le à l’écran d’accueil pour l’ouvrir ensuite sans la barre Safari.</span>
       </div>
+      <button class="install-btn" type="button" onclick="openInstall()">Installer</button>
     </div>
-    <div class="scroll" style="margin-top:12px">
-      <table>
-        <thead>
-          <tr><th>Date</th><th>Coucher</th><th>Réveil</th><th>TST</th><th>Efficacité</th><th>Qualité</th><th></th></tr>
-        </thead>
-        <tbody id="rows"></tbody>
-      </table>
-    </div>
-  </div>
 
-  <div class="footer">
-    Cet agenda est un outil d’observation personnelle. Si ton sommeil te préoccupe durablement ou affecte tes journées, parle-en à un professionnel de santé.
-
-    <details class="about-box">
-      <summary>À propos de cet agenda</summary>
-      <p>Mon Agenda du Sommeil a été conçu pour t’aider à observer ton rythme pendant 14 jours à partir d’informations simples renseignées chaque matin, comme tes horaires, le temps estimé pour t’endormir, tes réveils nocturnes, la qualité subjective de ton sommeil et ta sensation de récupération.</p>
-      <p>Les données restent enregistrées localement dans ton navigateur et ne sont pas envoyées automatiquement vers un serveur externe par cette web app.</p>
-      <p>Les résultats reposent sur tes estimations et servent à prendre du recul sur ton sommeil ; ils ne remplacent pas une actimétrie, une polysomnographie ni un diagnostic médical.</p>
+    <details class="instructions">
+      <summary>Comment utiliser ton agenda</summary>
+      <div class="details-body">
+        <p>Tu n’as rien à changer à ton sommeil avant de commencer, parce que pendant les prochains jours, l’idée est simplement d’observer ton rythme tel qu’il est vraiment, avec ses bonnes nuits, ses nuits plus compliquées et tout ce qui se passe entre les deux.</p>
+        <p><strong>Remplis ton agenda le matin</strong>, lorsque la nuit est encore assez fraîche dans ta mémoire, mais sans chercher à retrouver chaque minute avec précision ; ton estimation est suffisante, et il n’est pas nécessaire de regarder l’heure pendant la nuit uniquement pour pouvoir remplir l’agenda le lendemain.</p>
+        <p>Si tu oublies une journée, ne cherche pas à reconstruire la nuit plusieurs jours plus tard ; reprends simplement le lendemain matin et continue normalement.</p>
+        <p>Pense aussi à noter ce qui a rendu ta journée ou ta nuit différente de d’habitude, comme une sieste, un déplacement, une soirée plus tardive, une journée particulièrement stressante ou un événement qui te semble avoir influencé ton sommeil.</p>
+        <p>Au début, essaie de ne pas interpréter chaque chiffre séparément, parce qu’une nuit isolée raconte assez peu de choses ; c’est lorsque plusieurs jours se suivent que ton rythme et les différences entre les bons et les moins bons matins deviennent réellement utiles.</p>
+        <p><strong>Après 14 jours, la synthèse rassemble les principaux indicateurs de ton agenda</strong> afin de te permettre de regarder l’ensemble avec davantage de recul.</p>
+      </div>
     </details>
+
+    <section class="card form-card">
+      <div class="section-head">
+        <div>
+          <h2>Ta nuit</h2>
+          <p class="section-sub">Renseigne ce dont tu te souviens ce matin.</p>
+        </div>
+        <div class="progress">
+          <strong><span id="progressCount">0</span>/14</strong>
+          <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="date">Date</label>
+          <input id="date" type="date">
+        </div>
+
+        <div class="field">
+          <label for="dayType">Type de journée</label>
+          <select id="dayType">
+            <option>Travail</option>
+            <option>Repos</option>
+            <option>Week-end</option>
+            <option>Vacances</option>
+            <option>Autre</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="bedTime">Heure de mise au lit</label>
+          <input id="bedTime" type="time">
+        </div>
+
+        <div class="field">
+          <label for="trySleep">À quelle heure as-tu essayé de dormir ?</label>
+          <input id="trySleep" type="time">
+        </div>
+
+        <div class="field">
+          <label for="sol">Combien de temps as-tu mis à t’endormir ?</label>
+          <input id="sol" type="number" inputmode="numeric" min="0" max="600" step="1" placeholder="minutes">
+          <span class="field-help">Indique 0 si tu t’es endormi immédiatement.</span>
+        </div>
+
+        <div class="field">
+          <label for="awakenings">Combien de fois te souviens-tu t’être réveillé ?</label>
+          <input id="awakenings" type="number" inputmode="numeric" min="0" max="50" step="1" placeholder="ex. 2">
+          <span class="field-help">Indique 0 si tu ne te souviens d’aucun réveil.</span>
+        </div>
+
+        <div class="field">
+          <label for="waso">Au total, combien de temps es-tu resté éveillé pendant la nuit ?</label>
+          <input id="waso" type="number" inputmode="numeric" min="0" max="900" step="1" placeholder="minutes">
+          <span class="field-help">Additionne approximativement les périodes éveillées après ton premier endormissement.</span>
+        </div>
+
+        <div class="field">
+          <label for="finalWake">À quelle heure t’es-tu réveillé ?</label>
+          <input id="finalWake" type="time">
+        </div>
+
+        <div class="field">
+          <label for="getUp">À quelle heure es-tu sorti du lit ?</label>
+          <input id="getUp" type="time">
+        </div>
+
+        <div class="field">
+          <label for="nap">As-tu fait une sieste hier ?</label>
+          <select id="nap" onchange="toggleNapDuration()">
+            <option>Non</option>
+            <option>Oui</option>
+          </select>
+        </div>
+
+        <div id="napDurationField" class="field nap-duration" hidden>
+          <label for="napMin">Combien de temps au total ?</label>
+          <input id="napMin" type="number" inputmode="numeric" min="0" max="600" step="1" placeholder="minutes">
+        </div>
+
+        <div class="field">
+          <label for="quality">Comment était la qualité de ton sommeil ?</label>
+          <div class="feeling-wrap">
+            <input id="quality" class="feeling-range" type="range" min="1" max="5" step="1" value="3" oninput="updateFeelingLabel('quality')">
+            <div class="range-ends"><span>Très mauvaise</span><span>Très bonne</span></div>
+            <div id="qualityLabel" class="feeling-label">Moyenne · 3/5</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="rested">Comment te sens-tu au réveil ?</label>
+          <div class="feeling-wrap">
+            <input id="rested" class="feeling-range" type="range" min="1" max="5" step="1" value="3" oninput="updateFeelingLabel('rested')">
+            <div class="range-ends"><span>Pas du tout reposé</span><span>Très reposé</span></div>
+            <div id="restedLabel" class="feeling-label">Moyennement reposé · 3/5</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="sleepAid">As-tu pris quelque chose pour dormir ?</label>
+          <input id="sleepAid" type="text" placeholder="Facultatif">
+        </div>
+
+        <div class="field full">
+          <label for="comment">Un élément particulier à noter ?</label>
+          <textarea id="comment" placeholder="Par exemple : stress, douleur, alcool, voyage, activité inhabituelle, soirée plus tardive…"></textarea>
+        </div>
+      </div>
+
+      <div class="form-note">Pas besoin de chronométrer ta nuit : les estimations font partie du principe même d’un agenda du sommeil, mais les champs nécessaires au calcul doivent être renseignés, y compris avec 0 lorsqu’il n’y a pas eu de délai ou de réveil.</div>
+
+      <div class="actions">
+        <button class="btn primary" type="button" onclick="saveNight()">Ajouter ma nuit</button>
+        <button class="btn ghost" type="button" onclick="clearForm()">Effacer le formulaire</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>En un coup d’œil</h2>
+          <p class="section-sub">Les moyennes se mettent à jour à chaque nuit enregistrée.</p>
+        </div>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-label">Nuits renseignées</div>
+          <strong id="kN" class="metric-value">0</strong>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Sommeil moyen estimé</div>
+          <strong id="kTST" class="metric-value">—</strong>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Efficacité moyenne</div>
+          <strong id="kSE" class="metric-value">—</strong>
+          <div class="metric-note">repère courant ≥ 85 %</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Temps moyen pour t’endormir</div>
+          <strong id="kSOL" class="metric-value">—</strong>
+          <div class="metric-note">repère pratique &lt; 20 min</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card timeline-card">
+      <div class="section-head">
+        <div>
+          <h2>Ton rythme veille-sommeil</h2>
+          <p class="section-sub">Une lecture visuelle de tes horaires sur les 14 dernières nuits.</p>
+        </div>
+      </div>
+
+      <div class="timeline-legend">
+        <div class="legend-item"><span class="legend-swatch"></span>Temps au lit</div>
+        <div class="legend-item"><span class="legend-swatch sleep"></span>Fenêtre de sommeil estimée</div>
+      </div>
+
+      <div id="sleepProfile" class="sleep-profile"></div>
+      <p class="timeline-note">La barre sombre commence à l’heure d’endormissement estimée et se termine au réveil final ; le temps éveillé pendant la nuit est comptabilisé dans la synthèse, mais il n’est pas positionné sur cette frise puisque l’agenda en recueille la durée totale et non l’horaire exact.</p>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>Synthèse de ton agenda</h2>
+          <p class="section-sub">Une lecture factuelle des indicateurs calculables à partir d’un agenda du sommeil.</p>
+        </div>
+      </div>
+
+      <div id="summaryContent">
+        <div class="empty">Ajoute au moins une nuit pour générer ta synthèse.</div>
+      </div>
+
+      <div class="actions compact">
+        <button class="btn primary" type="button" onclick="shareOrDownloadReport()">Partager / enregistrer la synthèse</button>
+      </div>
+    </section>
+
+    <details class="data-details">
+      <summary>Données et export</summary>
+      <div class="details-body">
+        <p>Les données restent sur cet appareil tant que tu ne les exportes pas. Tu peux récupérer un fichier CSV pour les conserver ou les transmettre.</p>
+        <div class="actions compact" style="margin-top:10px">
+          <button class="btn secondary" type="button" onclick="exportCSV()">Exporter les données (.csv)</button>
+          <button class="btn danger" type="button" onclick="resetAll()">Effacer toutes les données</button>
+        </div>
+        <div class="table-wrap" style="margin-top:14px">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th><th>Au lit</th><th>Réveil</th><th>TTS</th><th>Efficacité</th><th>Qualité</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+
+    <details class="about-details" style="margin-top:14px">
+      <summary>À propos de cet agenda</summary>
+      <div class="details-body about-copy">
+        <p><strong>Pourquoi Club Daily Reminder a créé cet outil ?</strong> Parce qu’avant de vouloir optimiser son sommeil, il est souvent plus utile de commencer par l’observer avec suffisamment de recul. Une mauvaise nuit peut prendre beaucoup de place dans notre perception, alors qu’un agenda permet de regarder ce qui se répète réellement sur plusieurs jours.</p>
+        <p>Dans <strong>The Sleep Lab</strong>, Club Daily Reminder aborde le sommeil avec une approche qui mêle science, observation du quotidien et outils simples à utiliser, sans transformer chaque nuit en nouvelle performance à réussir.</p>
+        <p>Les informations saisies dans cette web app restent enregistrées localement dans ton navigateur et ne sont pas envoyées automatiquement vers Club Daily Reminder ou un serveur externe. Les résultats reposent sur tes estimations et ne remplacent pas une actimétrie, une polysomnographie ni un diagnostic médical.</p>
+        <a class="club-link" href="https://www.clubdailyreminder.fr/" target="_blank" rel="noopener noreferrer">Découvrir Club Daily Reminder →</a>
+      </div>
+    </details>
+
+    <p class="legal">Cet agenda est un outil d’observation personnelle. Si ton sommeil te préoccupe durablement ou affecte tes journées, parle-en à un professionnel de santé.</p>
+  </main>
+
+  <div id="installModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="installTitle" onclick="closeInstallOnBackdrop(event)">
+    <div class="modal">
+      <h3 id="installTitle">Installer l’agenda sur ton iPhone</h3>
+      <p>Une fois installé, l’agenda s’ouvre depuis ton écran d’accueil comme une web app, sans avoir à rechercher le lien chaque matin.</p>
+      <ol class="steps">
+        <li>Ouvre cette page dans <strong>Safari</strong>.</li>
+        <li>Appuie sur l’icône <strong>Partager</strong>.</li>
+        <li>Choisis <strong>Ajouter à l’écran d’accueil</strong>.</li>
+        <li>Vérifie le nom « Mon sommeil », puis appuie sur <strong>Ajouter</strong>.</li>
+      </ol>
+      <button class="btn primary" style="width:100%" type="button" onclick="closeInstall()">J’ai compris</button>
+    </div>
   </div>
-</div>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
 
 <script>
-const KEY="sleepDiaryEntriesV1";
-let entries=JSON.parse(localStorage.getItem(KEY)||"[]");
+(() => {
+  "use strict";
 
-function todayISO(){
-  const d=new Date();
-  const tz=d.getTimezoneOffset();
-  return new Date(d.getTime()-tz*60000).toISOString().slice(0,10);
-}
-document.getElementById("date").value=todayISO();
-
-function minutes(t){
-  if(!t) return null;
-  const [h,m]=t.split(":").map(Number);
-  return h*60+m;
-}
-function diffMinutes(start,end){
-  let s=minutes(start), e=minutes(end);
-  if(s==null||e==null) return null;
-  let d=e-s; if(d<0)d+=1440; return d;
-}
-function fmtHours(h){
-  if(h==null||isNaN(h)) return "—";
-  const hr=Math.floor(h), mn=Math.round((h-hr)*60);
-  return `${hr}h${String(mn).padStart(2,"0")}`;
-}
-function avg(arr){
-  const a=arr.filter(v=>v!==null && v!=="" && !isNaN(v)).map(Number);
-  return a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
-}
-
-function saveNight(){
-  const bedTime=v("bedTime"), trySleep=v("trySleep"), finalWake=v("finalWake"), getUp=v("getUp");
-  const sol=num("sol"), waso=num("waso");
-  if(!v("date") || !bedTime || !trySleep || !finalWake || !getUp){
-    alert("Merci de renseigner au minimum la date, le coucher, la tentative de sommeil, le réveil final et le lever.");
-    return;
-  }
-  const tibMin=diffMinutes(bedTime,getUp);
-  const sleepWindow=diffMinutes(trySleep,finalWake);
-  const tstMin=Math.max(0,(sleepWindow ?? 0)-(sol||0)-(waso||0));
-  const se=tibMin>0?Math.round((tstMin/tibMin)*1000)/10:null;
-
-  const item={
-    id:Date.now(), date:v("date"), dayType:v("dayType"),
-    nap:v("nap"), napMin:num("napMin"), bedTime, trySleep,
-    sol, awakenings:num("awakenings"), waso, finalWake, getUp,
-    quality:num("quality"), rested:num("rested"), sleepAid:v("sleepAid"),
-    comment:v("comment"), tibMin, tstMin, efficiency:se
+  const KEY = "sleepDiaryEntriesV1";
+  const labels = {
+    quality:["","Très mauvaise","Mauvaise","Moyenne","Bonne","Très bonne"],
+    rested:["","Pas du tout reposé","Peu reposé","Moyennement reposé","Reposé","Très reposé"]
   };
-  entries.push(item);
-  entries.sort((a,b)=>a.date.localeCompare(b.date));
-  localStorage.setItem(KEY,JSON.stringify(entries));
-  clearForm(true); render();
-  alert("Nuit enregistrée.");
-}
-function v(id){return document.getElementById(id).value}
-function num(id){const x=v(id);return x===""?null:Number(x)}
-function clearForm(keepDate=false){
-  const ids=["bedTime","trySleep","sol","awakenings","waso","finalWake","getUp","napMin","sleepAid","comment"];
-  ids.forEach(id=>document.getElementById(id).value="");
-  document.getElementById("dayType").value="Travail";
-  document.getElementById("nap").value="Non";
-  document.getElementById("quality").value="3";
-  document.getElementById("rested").value="3";
-  updateFeelingLabel("quality","qualityLabel");
-  updateFeelingLabel("rested","restedLabel");
-  if(!keepDate) document.getElementById("date").value=todayISO();
-}
-function deleteEntry(id){
-  entries=entries.filter(e=>e.id!==id);
-  localStorage.setItem(KEY,JSON.stringify(entries)); render();
-}
-function resetAll(){
-  if(confirm("Effacer définitivement toutes les nuits enregistrées sur cet appareil ?")){
-    entries=[]; localStorage.removeItem(KEY); render();
-  }
-}
-function render(){
-  document.getElementById("kN").textContent=entries.length;
-  const tst=avg(entries.map(e=>e.tstMin));
-  const se=avg(entries.map(e=>e.efficiency));
-  const sol=avg(entries.map(e=>e.sol));
-  document.getElementById("kTST").textContent=tst==null?"—":fmtHours(tst/60);
-  document.getElementById("kSE").textContent=se==null?"—":`${Math.round(se)}%`;
-  document.getElementById("kSOL").textContent=sol==null?"—":`${Math.round(sol)} min`;
 
-  const tbody=document.getElementById("rows");
-  tbody.innerHTML="";
-  entries.slice().reverse().forEach(e=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${e.date}</td><td>${e.bedTime}</td><td>${e.finalWake}</td>
-      <td>${fmtHours(e.tstMin/60)}</td><td>${e.efficiency??"—"}%</td>
-      <td>${e.quality}/5</td><td><button class="ghost" style="padding:7px 9px" onclick="deleteEntry(${e.id})">Suppr.</button></td>`;
-    tbody.appendChild(tr);
-  });
-}
-function csvEscape(s){
-  if(s==null) return "";
-  s=String(s).replace(/"/g,'""');
-  return `"${s}"`;
-}
-function exportCSV(){
-  if(!entries.length){alert("Aucune donnée à exporter.");return;}
-  const cols=["date","dayType","nap","napMin","bedTime","trySleep","sol","awakenings","waso","finalWake","getUp","quality","rested","sleepAid","comment","tibMin","tstMin","efficiency"];
-  const labels=["Date","Type de journée","Sieste","Durée sieste (min)","Heure au lit","Tentative de sommeil","Latence (min)","Nb éveils","WASO (min)","Réveil final","Lever","Qualité","Repos","Aide au sommeil","Commentaires","Temps au lit (min)","Sommeil total estimé (min)","Efficacité (%)"];
-  let csv=labels.map(csvEscape).join(";")+"\n";
-  entries.forEach(e=>{csv+=cols.map(c=>csvEscape(e[c])).join(";")+"\n"});
-  download("\uFEFF"+csv,"agenda_sommeil.csv","text/csv;charset=utf-8");
-}
-function exportJSON(){
-  if(!entries.length){alert("Aucune donnée à exporter.");return;}
-  download(JSON.stringify(entries,null,2),"agenda_sommeil.json","application/json");
-}
-function download(content,name,type){
-  const blob=new Blob([content],{type});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");a.href=url;a.download=name;a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),500);
-}
+  let entries = loadEntries();
 
-function lineChart(canvasId, datasets, yMin=null, yMax=null){
-  const c=document.getElementById(canvasId);
-  if(!c) return;
-  const ctx=c.getContext("2d"), W=c.width, H=c.height;
-  ctx.clearRect(0,0,W,H);
-  ctx.font="12px -apple-system,BlinkMacSystemFont,Segoe UI,Arial";
-  ctx.fillStyle="#6f756f";
-  const pad={l:44,r:14,t:12,b:34};
-  const plotW=W-pad.l-pad.r, plotH=H-pad.t-pad.b;
+  const $ = id => document.getElementById(id);
 
-  let all=[];
-  datasets.forEach(d=>all.push(...d.values.filter(v=>v!=null && !isNaN(v))));
-  if(!all.length){
-    ctx.fillText("Pas encore assez de données.",20,35);
-    return;
-  }
-  let min=yMin!=null?yMin:Math.min(...all), max=yMax!=null?yMax:Math.max(...all);
-  if(max===min){max=min+1}
-  if(yMin==null){min=Math.max(0,min-(max-min)*0.15)}
-  if(yMax==null){max=max+(max-min)*0.15}
-
-  ctx.strokeStyle="#e6e5df"; ctx.lineWidth=1;
-  for(let i=0;i<5;i++){
-    const y=pad.t+(plotH*i/4);
-    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
-    const val=max-(max-min)*i/4;
-    ctx.fillStyle="#6f756f";ctx.fillText(Math.round(val),6,y+4);
-  }
-
-  const n=Math.max(...datasets.map(d=>d.values.length));
-  const x=i=>pad.l+(n<=1?plotW/2:(plotW*i/(n-1)));
-  const y=v=>pad.t+plotH-(v-min)/(max-min)*plotH;
-
-  datasets.forEach((d,idx)=>{
-    ctx.strokeStyle=idx===0?"#2f5d50":"#8a6e4b";
-    ctx.fillStyle=ctx.strokeStyle;ctx.lineWidth=2;
-    ctx.beginPath();
-    let started=false;
-    d.values.forEach((v,i)=>{
-      if(v==null||isNaN(v)) return;
-      if(!started){ctx.moveTo(x(i),y(v));started=true}else ctx.lineTo(x(i),y(v));
-    });
-    ctx.stroke();
-    d.values.forEach((v,i)=>{
-      if(v==null||isNaN(v)) return;
-      ctx.beginPath();ctx.arc(x(i),y(v),3.5,0,Math.PI*2);ctx.fill();
-    });
-  });
-
-  const labels=entries.map(e=>e.date.slice(5).split("-").reverse().join("/"));
-  ctx.fillStyle="#6f756f";
-  const step=Math.max(1,Math.ceil(labels.length/6));
-  labels.forEach((lab,i)=>{ if(i%step===0||i===labels.length-1) ctx.fillText(lab,x(i)-12,H-10); });
-}
-
-function variabilityMinutes(times){
-  const vals=times.filter(Boolean).map(minutes);
-  if(vals.length<2) return null;
-  // circular adjustment around midnight for sleep times
-  const adjusted=vals.map(v=>v<720?v+1440:v);
-  const mean=adjusted.reduce((a,b)=>a+b,0)/adjusted.length;
-  const variance=adjusted.reduce((s,v)=>s+(v-mean)**2,0)/(adjusted.length-1);
-  return Math.sqrt(variance);
-}
-function fmtMin(m){
-  if(m==null||isNaN(m)) return "—";
-  return `${Math.round(m)} min`;
-}
-function generateReportText(){
-  if(!entries.length) return "Ajoute au moins une nuit pour générer ta synthèse.";
-
-  const n=entries.length;
-  const tst=avg(entries.map(e=>e.tstMin));
-  const tib=avg(entries.map(e=>e.tibMin));
-  const se=avg(entries.map(e=>e.efficiency));
-  const sol=avg(entries.map(e=>e.sol));
-  const waso=avg(entries.map(e=>e.waso));
-  const awak=avg(entries.map(e=>e.awakenings));
-  const qual=avg(entries.map(e=>e.quality));
-  const rest=avg(entries.map(e=>e.rested));
-  const bedVar=variabilityMinutes(entries.map(e=>e.bedTime));
-  const upVar=variabilityMinutes(entries.map(e=>e.getUp));
-
-  const seText = se==null ? "—" : `${Math.round(se)} %`;
-  const solText = sol==null ? "—" : `${Math.round(sol)} min`;
-  const wasoText = waso==null ? "—" : `${Math.round(waso)} min`;
-  const awakText = awak==null ? "—" : awak.toFixed(1);
-  const qualText = qual==null ? "—" : `${qual.toFixed(1)} / 5`;
-  const restText = rest==null ? "—" : `${rest.toFixed(1)} / 5`;
-
-  let notes=[];
-
-  if(se!=null){
-    if(se>=85){
-      notes.push(`L’efficacité moyenne du sommeil est de ${Math.round(se)} %, ce qui se situe au-dessus du repère de 85 % couramment utilisé dans l’évaluation comportementale du sommeil.`);
-    } else {
-      notes.push(`L’efficacité moyenne du sommeil est de ${Math.round(se)} %, soit en dessous du repère de 85 % couramment utilisé dans l’évaluation comportementale du sommeil.`);
+  function loadEntries(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(KEY) || "[]");
+      return Array.isArray(parsed) ? parsed : [];
+    }catch{
+      return [];
     }
   }
 
-  if(sol!=null){
-    if(sol<20){
-      notes.push(`Le temps moyen pour t’endormir est de ${Math.round(sol)} minutes, soit inférieur au repère de 20 minutes.`);
-    } else {
-      notes.push(`Le temps moyen pour t’endormir est de ${Math.round(sol)} minutes, soit supérieur au repère de 20 minutes.`);
+  function persist(){
+    localStorage.setItem(KEY, JSON.stringify(entries));
+  }
+
+  function todayISO(){
+    const d = new Date();
+    const offset = d.getTimezoneOffset();
+    return new Date(d.getTime() - offset*60000).toISOString().slice(0,10);
+  }
+
+  function value(id){ return $(id).value; }
+  function numberValue(id){
+    const raw = value(id);
+    return raw === "" ? null : Number(raw);
+  }
+
+  function minutes(time){
+    if(!time) return null;
+    const parts = time.split(":").map(Number);
+    return parts[0]*60 + parts[1];
+  }
+
+  function addMinutesToTime(time, extra){
+    if(!time || extra == null) return null;
+    let total = minutes(time) + Number(extra);
+    total = ((total % 1440) + 1440) % 1440;
+    const h = Math.floor(total/60);
+    const m = total%60;
+    return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+  }
+
+  function diffMinutes(start,end){
+    const s = minutes(start), e = minutes(end);
+    if(s == null || e == null) return null;
+    let d = e-s;
+    if(d < 0) d += 1440;
+    return d;
+  }
+
+  function avg(arr){
+    const nums = arr.filter(v => v !== null && v !== "" && Number.isFinite(Number(v))).map(Number);
+    return nums.length ? nums.reduce((a,b)=>a+b,0)/nums.length : null;
+  }
+
+  function fmtHoursFromMinutes(mins){
+    if(mins == null || !Number.isFinite(Number(mins))) return "—";
+    const rounded = Math.max(0, Math.round(Number(mins)));
+    const h = Math.floor(rounded/60);
+    const m = rounded%60;
+    return `${h} h ${String(m).padStart(2,"0")}`;
+  }
+
+  function fmtMinutes(mins){
+    if(mins == null || !Number.isFinite(Number(mins))) return "—";
+    return `${Math.round(Number(mins))} min`;
+  }
+
+  function formatDate(iso){
+    if(!iso) return "—";
+    const [y,m,d] = iso.split("-");
+    return `${d}/${m}/${y}`;
+  }
+
+  function shortDate(iso){
+    if(!iso) return "";
+    const [,m,d] = iso.split("-");
+    return `${d}/${m}`;
+  }
+
+  function updateFeelingLabel(type){
+    const input = $(type);
+    const output = $(type + "Label");
+    const v = Number(input.value);
+    output.textContent = `${labels[type][v]} · ${v}/5`;
+  }
+
+  window.updateFeelingLabel = updateFeelingLabel;
+
+  function toggleNapDuration(){
+    const yes = value("nap") === "Oui";
+    $("napDurationField").hidden = !yes;
+    if(!yes) $("napMin").value = "";
+  }
+  window.toggleNapDuration = toggleNapDuration;
+
+  function showToast(message){
+    const t = $("toast");
+    t.textContent = message;
+    t.classList.add("show");
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(()=>t.classList.remove("show"), 2200);
+  }
+
+  function clearForm(keepDate=false){
+    ["bedTime","trySleep","sol","awakenings","waso","finalWake","getUp","napMin","sleepAid","comment"].forEach(id => $(id).value = "");
+    $("dayType").value = "Travail";
+    $("nap").value = "Non";
+    $("quality").value = "3";
+    $("rested").value = "3";
+    updateFeelingLabel("quality");
+    updateFeelingLabel("rested");
+    toggleNapDuration();
+    if(!keepDate) $("date").value = todayISO();
+  }
+  window.clearForm = clearForm;
+
+  function validateForm(){
+    const required = [
+      ["date","la date"],
+      ["bedTime","l’heure de mise au lit"],
+      ["trySleep","l’heure à laquelle tu as essayé de dormir"],
+      ["sol","le temps mis pour t’endormir, même si la valeur est 0"],
+      ["awakenings","le nombre de réveils, même si la valeur est 0"],
+      ["waso","le temps total éveillé pendant la nuit, même si la valeur est 0"],
+      ["finalWake","l’heure du réveil"],
+      ["getUp","l’heure de sortie du lit"]
+    ];
+    for(const [id,label] of required){
+      if(value(id) === ""){
+        $(id).focus();
+        showToast(`Renseigne ${label}.`);
+        return false;
+      }
+    }
+    if(value("nap")==="Oui" && value("napMin")===""){
+      $("napMin").focus();
+      showToast("Renseigne la durée de la sieste.");
+      return false;
+    }
+    return true;
+  }
+
+  function buildEntry(){
+    const bedTime = value("bedTime");
+    const trySleep = value("trySleep");
+    const finalWake = value("finalWake");
+    const getUp = value("getUp");
+    const sol = numberValue("sol");
+    const waso = numberValue("waso");
+    const tibMin = diffMinutes(bedTime,getUp);
+    const sleepWindow = diffMinutes(trySleep,finalWake);
+    const tstMin = Math.max(0, sleepWindow - sol - waso);
+    const efficiency = tibMin > 0 ? Math.round((tstMin/tibMin)*1000)/10 : null;
+
+    return {
+      id: Date.now(),
+      date:value("date"),
+      dayType:value("dayType"),
+      nap:value("nap"),
+      napMin:value("nap")==="Oui" ? numberValue("napMin") : null,
+      bedTime,
+      trySleep,
+      sol,
+      awakenings:numberValue("awakenings"),
+      waso,
+      finalWake,
+      getUp,
+      quality:numberValue("quality"),
+      rested:numberValue("rested"),
+      sleepAid:value("sleepAid").trim(),
+      comment:value("comment").trim(),
+      tibMin,
+      tstMin,
+      efficiency
+    };
+  }
+
+  function saveNight(){
+    if(!validateForm()) return;
+    const entry = buildEntry();
+
+    const existingIndex = entries.findIndex(e => e.date === entry.date);
+    if(existingIndex >= 0){
+      const replace = confirm("Une nuit est déjà enregistrée pour cette date. Veux-tu la remplacer ?");
+      if(!replace) return;
+      entry.id = entries[existingIndex].id || Date.now();
+      entries[existingIndex] = entry;
+    }else{
+      entries.push(entry);
+    }
+
+    entries.sort((a,b)=>a.date.localeCompare(b.date));
+    persist();
+    clearForm(true);
+    renderAll();
+    showToast("Nuit enregistrée.");
+  }
+  window.saveNight = saveNight;
+
+  function deleteEntry(id){
+    if(!confirm("Supprimer cette nuit de l’agenda ?")) return;
+    entries = entries.filter(e => e.id !== id);
+    persist();
+    renderAll();
+  }
+  window.deleteEntry = deleteEntry;
+
+  function resetAll(){
+    if(!entries.length) return;
+    if(confirm("Effacer définitivement toutes les nuits enregistrées sur cet appareil ?")){
+      entries = [];
+      localStorage.removeItem(KEY);
+      renderAll();
+      showToast("Toutes les données ont été effacées.");
+    }
+  }
+  window.resetAll = resetAll;
+
+  function variabilityMinutes(times, bedtime=false){
+    const vals = times.filter(Boolean).map(minutes);
+    if(vals.length < 2) return null;
+    const adjusted = bedtime ? vals.map(v => v < 720 ? v + 1440 : v) : vals;
+    const mean = adjusted.reduce((a,b)=>a+b,0)/adjusted.length;
+    const variance = adjusted.reduce((sum,v)=>sum + (v-mean)**2,0)/(adjusted.length-1);
+    return Math.sqrt(variance);
+  }
+
+  function getStats(){
+    const source = entries.slice(-14);
+    return {
+      source,
+      n:source.length,
+      tib:avg(source.map(e=>e.tibMin)),
+      tst:avg(source.map(e=>e.tstMin)),
+      se:avg(source.map(e=>e.efficiency)),
+      sol:avg(source.map(e=>e.sol)),
+      waso:avg(source.map(e=>e.waso)),
+      awakenings:avg(source.map(e=>e.awakenings)),
+      quality:avg(source.map(e=>e.quality)),
+      rested:avg(source.map(e=>e.rested)),
+      bedVar:variabilityMinutes(source.map(e=>e.bedTime), true),
+      getUpVar:variabilityMinutes(source.map(e=>e.getUp), false)
+    };
+  }
+
+  function renderProgress(){
+    const count = Math.min(entries.length,14);
+    $("headerCount").textContent = count;
+    $("progressCount").textContent = count;
+    $("progressBar").style.width = `${Math.min(100,(count/14)*100)}%`;
+  }
+
+  function renderMetrics(){
+    const s = getStats();
+    $("kN").textContent = s.n;
+    $("kTST").textContent = fmtHoursFromMinutes(s.tst);
+    $("kSE").textContent = s.se == null ? "—" : `${Math.round(s.se)} %`;
+    $("kSOL").textContent = fmtMinutes(s.sol);
+  }
+
+  function timelinePercent(time){
+    if(!time) return null;
+    let m = minutes(time);
+    if(m < 12*60) m += 1440;
+    const start = 20*60;
+    const end = 36*60;
+    return Math.max(0, Math.min(100, ((m-start)/(end-start))*100));
+  }
+
+  function timelineWidth(startTime,endTime){
+    if(!startTime || !endTime) return 0;
+    return Math.max(0, Math.min(100, diffMinutes(startTime,endTime)/(16*60)*100));
+  }
+
+  function renderSleepProfile(){
+    const el = $("sleepProfile");
+    const source = entries.slice(-14);
+    if(!source.length){
+      el.innerHTML = '<div class="empty">Ton rythme apparaîtra ici après ta première nuit enregistrée.</div>';
+      return;
+    }
+
+    const ticks = [
+      ["20 h",0],["00 h",25],["04 h",50],["08 h",75],["12 h",100]
+    ];
+
+    let html = `<div class="axis-row"><div></div><div class="axis">`;
+    for(const [label,pos] of ticks){
+      html += `<span style="left:${pos}%">${label}</span>`;
+    }
+    html += `</div></div>`;
+
+    for(const e of source){
+      const sleepOnset = addMinutesToTime(e.trySleep, e.sol || 0);
+      const bedLeft = timelinePercent(e.bedTime);
+      const bedWidth = timelineWidth(e.bedTime,e.getUp);
+      const sleepLeft = timelinePercent(sleepOnset);
+      const sleepWidth = timelineWidth(sleepOnset,e.finalWake);
+
+      html += `
+        <div class="sleep-row">
+          <div class="sleep-date">${shortDate(e.date)}</div>
+          <div class="sleep-track" title="${formatDate(e.date)}">
+            <div class="bed-window" style="left:${bedLeft ?? 0}%;width:${bedWidth}%"></div>
+            <div class="sleep-window" style="left:${sleepLeft ?? 0}%;width:${sleepWidth}%"></div>
+          </div>
+        </div>`;
+    }
+    el.innerHTML = html;
+  }
+
+  function factualBullets(s){
+    const bullets = [];
+    if(s.se != null){
+      bullets.push(`L’efficacité moyenne du sommeil est de ${Math.round(s.se)} %. Le seuil de 85 % est un repère couramment utilisé dans les approches comportementales du sommeil, mais il ne constitue pas à lui seul un diagnostic.`);
+    }
+    if(s.sol != null){
+      bullets.push(`Le temps moyen pour t’endormir est de ${Math.round(s.sol)} minutes${s.sol < 20 ? ", soit inférieur" : ", soit supérieur ou égal"} au repère pratique de 20 minutes.`);
+    }
+    if(s.waso != null){
+      bullets.push(`Après le premier endormissement, tu passes en moyenne ${Math.round(s.waso)} minutes éveillé au cours de la nuit.`);
+    }
+    if(s.bedVar != null && s.getUpVar != null){
+      bullets.push(`La variabilité de tes horaires est d’environ ${Math.round(s.bedVar)} minutes pour la mise au lit et ${Math.round(s.getUpVar)} minutes pour la sortie du lit.`);
+    }
+    return bullets;
+  }
+
+  function renderSummary(){
+    const el = $("summaryContent");
+    const s = getStats();
+    if(!s.n){
+      el.innerHTML = '<div class="empty">Ajoute au moins une nuit pour générer ta synthèse.</div>';
+      return;
+    }
+    const first = s.source[0].date;
+    const last = s.source[s.source.length-1].date;
+    const bullets = factualBullets(s);
+
+    el.innerHTML = `
+      <div class="summary-period">${formatDate(first)} → ${formatDate(last)} · ${s.n} nuit${s.n>1?"s":""} renseignée${s.n>1?"s":""}</div>
+      <div class="summary-grid">
+        <div class="summary-item"><span>Temps passé au lit moyen</span><strong>${fmtHoursFromMinutes(s.tib)}</strong></div>
+        <div class="summary-item"><span>Temps total de sommeil estimé</span><strong>${fmtHoursFromMinutes(s.tst)}</strong></div>
+        <div class="summary-item"><span>Efficacité moyenne du sommeil</span><strong>${s.se==null?"—":Math.round(s.se)+" %"}</strong><small>repère courant ≥ 85 %</small></div>
+        <div class="summary-item"><span>Temps moyen pour t’endormir</span><strong>${fmtMinutes(s.sol)}</strong><small>repère pratique &lt; 20 min</small></div>
+        <div class="summary-item"><span>Temps éveillé après endormissement (WASO)</span><strong>${fmtMinutes(s.waso)}</strong></div>
+        <div class="summary-item"><span>Nombre moyen de réveils</span><strong>${s.awakenings==null?"—":s.awakenings.toFixed(1)}</strong></div>
+        <div class="summary-item"><span>Qualité subjective moyenne</span><strong>${s.quality==null?"—":s.quality.toFixed(1)+" / 5"}</strong></div>
+        <div class="summary-item"><span>Récupération moyenne au réveil</span><strong>${s.rested==null?"—":s.rested.toFixed(1)+" / 5"}</strong></div>
+      </div>
+      <div class="factual-reading">
+        <h3>Lecture des données</h3>
+        <ul>${bullets.map(b=>`<li>${b}</li>`).join("")}</ul>
+      </div>`;
+  }
+
+  function renderTable(){
+    const tbody = $("rows");
+    if(!entries.length){
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#69716c">Aucune nuit enregistrée.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = entries.slice().reverse().map(e => `
+      <tr>
+        <td>${formatDate(e.date)}</td>
+        <td>${e.bedTime}</td>
+        <td>${e.finalWake}</td>
+        <td>${fmtHoursFromMinutes(e.tstMin)}</td>
+        <td>${e.efficiency==null?"—":Math.round(e.efficiency)+" %"}</td>
+        <td>${e.quality}/5</td>
+        <td><button class="mini-delete" type="button" onclick="deleteEntry(${e.id})">Suppr.</button></td>
+      </tr>`).join("");
+  }
+
+  function renderAll(){
+    renderProgress();
+    renderMetrics();
+    renderSleepProfile();
+    renderSummary();
+    renderTable();
+  }
+
+  function csvEscape(value){
+    if(value == null) return '""';
+    return `"${String(value).replace(/"/g,'""')}"`;
+  }
+
+  function exportCSV(){
+    if(!entries.length){
+      showToast("Aucune donnée à exporter.");
+      return;
+    }
+    const labels = ["Date","Type de journée","Sieste","Durée sieste (min)","Heure au lit","Tentative de sommeil","Temps pour s'endormir (min)","Nombre de réveils","WASO (min)","Réveil final","Sortie du lit","Qualité (1-5)","Récupération (1-5)","Aide au sommeil","Commentaires","Temps au lit (min)","TTS estimé (min)","Efficacité (%)"];
+    const cols = ["date","dayType","nap","napMin","bedTime","trySleep","sol","awakenings","waso","finalWake","getUp","quality","rested","sleepAid","comment","tibMin","tstMin","efficiency"];
+    const rows = [labels.map(csvEscape).join(";")];
+    entries.forEach(e => rows.push(cols.map(c=>csvEscape(e[c])).join(";")));
+    downloadText("\uFEFF"+rows.join("\n"),"agenda_sommeil.csv","text/csv;charset=utf-8");
+  }
+  window.exportCSV = exportCSV;
+
+  function reportHTML(){
+    const s = getStats();
+    if(!s.n) return null;
+    const first = s.source[0].date;
+    const last = s.source[s.source.length-1].date;
+    const bullets = factualBullets(s).map(x=>`<li>${escapeHTML(x)}</li>`).join("");
+    const nightRows = s.source.map(e=>`
+      <tr>
+        <td>${formatDate(e.date)}</td>
+        <td>${e.bedTime}</td>
+        <td>${e.finalWake}</td>
+        <td>${fmtHoursFromMinutes(e.tstMin)}</td>
+        <td>${e.efficiency==null?"—":Math.round(e.efficiency)+" %"}</td>
+        <td>${e.sol} min</td>
+        <td>${e.waso} min</td>
+        <td>${e.quality}/5</td>
+        <td>${e.rested}/5</td>
+      </tr>`).join("");
+
+    return `<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Synthèse de mon agenda du sommeil</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:#202523;max-width:900px;margin:36px auto;padding:0 22px;line-height:1.5}
+h1{font-size:28px;margin-bottom:5px} .period{color:#69716c;margin-bottom:22px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.item{border:1px solid #ddd;border-radius:12px;padding:12px}.item span{display:block;color:#69716c;font-size:12px}.item strong{font-size:18px}
+h2{font-size:18px;margin-top:26px}li{margin:6px 0}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left;white-space:nowrap}th{color:#69716c}
+.note{font-size:11px;color:#69716c;margin-top:22px}.print{margin:18px 0;padding:11px 14px;border:0;border-radius:10px;background:#315f52;color:#fff;font-weight:700}
+@media(max-width:620px){.grid{grid-template-columns:1fr 1fr}.table{overflow:auto}.table table{min-width:720px}}
+@media print{.print{display:none}body{margin:0}}
+</style></head><body>
+<h1>Synthèse de mon agenda du sommeil</h1>
+<div class="period">${formatDate(first)} → ${formatDate(last)} · ${s.n} nuit${s.n>1?"s":""}</div>
+<div class="grid">
+<div class="item"><span>Temps passé au lit moyen</span><strong>${fmtHoursFromMinutes(s.tib)}</strong></div>
+<div class="item"><span>Temps total de sommeil estimé</span><strong>${fmtHoursFromMinutes(s.tst)}</strong></div>
+<div class="item"><span>Efficacité moyenne du sommeil</span><strong>${s.se==null?"—":Math.round(s.se)+" %"}</strong></div>
+<div class="item"><span>Temps moyen pour s’endormir</span><strong>${fmtMinutes(s.sol)}</strong></div>
+<div class="item"><span>WASO moyen</span><strong>${fmtMinutes(s.waso)}</strong></div>
+<div class="item"><span>Nombre moyen de réveils</span><strong>${s.awakenings==null?"—":s.awakenings.toFixed(1)}</strong></div>
+<div class="item"><span>Qualité subjective moyenne</span><strong>${s.quality==null?"—":s.quality.toFixed(1)+" / 5"}</strong></div>
+<div class="item"><span>Récupération moyenne au réveil</span><strong>${s.rested==null?"—":s.rested.toFixed(1)+" / 5"}</strong></div>
+</div>
+<h2>Lecture des données</h2><ul>${bullets}</ul>
+<h2>Détail des nuits</h2>
+<div class="table"><table><thead><tr><th>Date</th><th>Au lit</th><th>Réveil</th><th>TTS</th><th>Efficacité</th><th>Endormissement</th><th>WASO</th><th>Qualité</th><th>Récupération</th></tr></thead><tbody>${nightRows}</tbody></table></div>
+<p class="note">Les valeurs proviennent d’un agenda du sommeil subjectif et reposent sur des estimations. Elles ne remplacent pas une mesure objective par actimétrie ou polysomnographie, ni un diagnostic médical.</p>
+<button class="print" onclick="window.print()">Imprimer / Enregistrer en PDF</button>
+</body></html>`;
+  }
+
+  function escapeHTML(str){
+    return String(str).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+  }
+
+  async function shareOrDownloadReport(){
+    const html = reportHTML();
+    if(!html){
+      showToast("Ajoute au moins une nuit avant d’exporter.");
+      return;
+    }
+    const file = new File([html], "synthese_agenda_sommeil.html", {type:"text/html"});
+    try{
+      if(navigator.canShare && navigator.canShare({files:[file]}) && navigator.share){
+        await navigator.share({
+          title:"Synthèse de mon agenda du sommeil",
+          text:"Ma synthèse d’agenda du sommeil",
+          files:[file]
+        });
+        return;
+      }
+    }catch(err){
+      if(err && err.name === "AbortError") return;
+    }
+    downloadText(html,"synthese_agenda_sommeil.html","text/html;charset=utf-8");
+  }
+  window.shareOrDownloadReport = shareOrDownloadReport;
+
+  function downloadText(content,name,type){
+    const blob = new Blob([content],{type});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+
+  function openInstall(){ $("installModal").classList.add("open"); }
+  function closeInstall(){ $("installModal").classList.remove("open"); }
+  function closeInstallOnBackdrop(event){ if(event.target === $("installModal")) closeInstall(); }
+  window.openInstall = openInstall;
+  window.closeInstall = closeInstall;
+  window.closeInstallOnBackdrop = closeInstallOnBackdrop;
+
+  function initStandalone(){
+    const standalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    if(standalone) document.body.classList.add("standalone");
+  }
+
+  function registerSW(){
+    if("serviceWorker" in navigator && location.protocol.startsWith("http")){
+      navigator.serviceWorker.register("./sw.js").catch(()=>{});
     }
   }
 
-  if(waso!=null){
-    notes.push(`Après l’endormissement, tu passes en moyenne ${Math.round(waso)} minutes éveillé au cours de la nuit.`);
-  }
-
-  if(bedVar!=null || upVar!=null){
-    notes.push(`La variabilité moyenne de tes horaires est d’environ ${Math.round(bedVar||0)} minutes pour le coucher et ${Math.round(upVar||0)} minutes pour le lever.`);
-  }
-
-  return `SYNTHÈSE DE TON AGENDA DU SOMMEIL
-
-Période analysée : ${entries[0].date} au ${entries[entries.length-1].date}
-Nombre de nuits renseignées : ${n}
-
-INDICATEURS PRINCIPAUX
-
-• Temps passé au lit moyen : ${fmtHours((tib||0)/60)}
-Il correspond au temps entre le moment où tu te mets au lit et celui où tu en sors le matin.
-
-• Temps total de sommeil estimé : ${fmtHours((tst||0)/60)}
-Il correspond à la durée de sommeil que tu estimes avoir réellement obtenue pendant la nuit.
-
-• Efficacité moyenne du sommeil : ${seText}
-Elle correspond à la proportion du temps passé au lit réellement consacrée au sommeil.
-
-• Temps moyen pour t’endormir : ${solText}
-Il correspond au délai estimé entre le moment où tu essaies de dormir et ton endormissement.
-
-• Temps éveillé pendant la nuit : ${wasoText}
-Il correspond au temps total estimé passé éveillé après le premier endormissement.
-
-• Nombre moyen de réveils : ${awakText} par nuit
-
-• Qualité subjective moyenne du sommeil : ${qualText}
-
-• Sensation moyenne de récupération au réveil : ${restText}
-
-LECTURE DES DONNÉES
-
-${notes.map(x=>"• "+x).join("\n")}
-
-Ces résultats proviennent d’un agenda du sommeil subjectif : ils reposent sur tes estimations et ne remplacent pas une mesure objective du sommeil par actimétrie ou polysomnographie.`;
-}
-function renderCharts(){
-  renderSleepProfile();
-}
-
-function exportReport(){
-  if(!entries.length){alert("Aucune donnée à exporter.");return;}
-  const report=generateReportText();
-  const rows=entries.map(e=>`
-    <tr>
-      <td>${e.date}</td><td>${e.bedTime}</td><td>${e.finalWake}</td>
-      <td>${fmtHours(e.tstMin/60)}</td><td>${e.efficiency??"—"}%</td>
-      <td>${e.sol??"—"}</td><td>${e.waso??"—"}</td><td>${e.quality}/5</td>
-    </tr>`).join("");
-  const reportHtml=`<!doctype html><html lang="fr"><head><meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Mon bilan agenda du sommeil</title>
-  <style>
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:#1f2321;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.5}
-  h1{font-size:28px} h2{margin-top:28px;font-size:18px}
-  .box{background:#f6f5f1;border-radius:16px;padding:18px;white-space:pre-wrap}
-  table{width:100%;border-collapse:collapse;margin-top:18px;font-size:13px}
-  th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}
-  th{background:#f6f5f1}
-  .note{font-size:12px;color:#666;margin-top:24px}
-  @media print{body{margin:0}.no-print{display:none}}
-  </style></head><body>
-  <h1>Mon bilan — Agenda du sommeil</h1>
-  <div class="box">${report.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
-  <h2>Détail des nuits</h2>
-  <table><thead><tr><th>Date</th><th>Coucher</th><th>Réveil</th><th>TST</th><th>Efficacité</th><th>SOL</th><th>WASO</th><th>Qualité</th></tr></thead><tbody>${rows}</tbody></table>
-  <p class="note">Ce bilan est un outil d’observation personnelle. Il ne constitue pas un diagnostic médical.</p>
-  <button class="no-print" onclick="window.print()">Imprimer / Enregistrer en PDF</button>
-  </body></html>`;
-  download(reportHtml,"mon_bilan_sommeil.html","text/html;charset=utf-8");
-}
-
-const originalRender=render;
-render=function(){
-  originalRender();
-  renderCharts();
-  const rp=document.getElementById("reportPreview");
-  if(rp) rp.textContent=generateReportText();
-}
-updateFeelingLabel("quality","qualityLabel");
-updateFeelingLabel("rested","restedLabel");
-render();
+  $("date").value = todayISO();
+  updateFeelingLabel("quality");
+  updateFeelingLabel("rested");
+  toggleNapDuration();
+  initStandalone();
+  renderAll();
+  registerSW();
+})();
 </script>
 </body>
 </html>
